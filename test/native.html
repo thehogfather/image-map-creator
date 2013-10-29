@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <style>
+            #follow{
+                width: 50px;
+                height: 50px;
+                position:absolute;
+                background: black;
+                border: 3px solid #888;
+            }
+            
+            #console {
+                height: 100px;
+                width: 60px;
+                position:absolute;
+                top: 100px;
+                background: #ddd;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="follow">
+        
+        </div>
+        
+        <div id="console">
+        
+        </div>
+        <script>
+            function log(msg) {
+                document.getElementById("console").innerHTML = msg; 
+                console.log(msg);
+            }
+            
+            var el = document.getElementById("follow"), follow;
+            log(el.clientHeight);
+            el.onmousedown = function (event) {
+                follow = true;
+            };
+            
+            el.onmouseup = function (event) {
+                follow = false;  
+            };
+            
+            
+            document.onmousemove = function (event) {
+                if (follow) {
+                    el.style.top = (event.clientY - 25) + "px";
+                    el.style.left = (event.clientX - 25) + "px";
+                    log(event.clientX + "," + event.clientY);
+                }
+            };
+        </script>
+    </body>
+</html>
