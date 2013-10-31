@@ -16,6 +16,12 @@
         return el.node().getBoundingClientRect();
     }
     
+    function pos(el) {
+        var x = parseFloat(el.attr("x")), y = parseFloat(el.attr("y")), w = parseFloat(el.attr("width")),
+            h = parseFloat(el.attr("height"));
+        return {x: x, y: y, height: h, width: w};
+    }
+    
     function updateRegion(r, d) {
         d.width = isNaN(d.width) || d.width === null ? parseFloat(r.attr("width")) : d.width;
         d.height = isNaN(d.height) || d.height === null ? parseFloat(r.attr("height")) : d.height;
@@ -48,7 +54,7 @@
             
             region.on("mouseup", function () {
                 svg.on("mousemove.region", null);
-                dispatcher.move({region: region, pos: cr(region)});
+                dispatcher.move({region: region, pos: pos(region)});
             });
             //higlight the region show it has been selected
             if (!d3.event.ctrlKey) {//remove previous selections if ctrl key wasnt pressed
@@ -101,7 +107,8 @@
             d3.select(this).on("mouseup", function (d, i) {
                 svg.on("mousemove.corner", null);
                 //dispatch move event
-                dispatcher.resize({region: region, old: {x: rx, y: ry, w: rw, h: rh}, current: {x: x, y: y, h: h, w: w}, pos: cr(region)});
+                dispatcher.resize({region: region, old: {x: rx, y: ry, width: rw, height: rh},
+                                pos: pos(region)});
             });
         });
     }
@@ -130,7 +137,7 @@
             if (!moved) {
                 g.remove();
             } else {
-                dispatcher.create({region: region, pos: cr(region)});//dispatch create event
+                dispatcher.create({region: region, pos: pos(region)});//dispatch create event
             }
             svg.on("mousemove", null)
                 .on("mouseup", null);
@@ -227,5 +234,13 @@
         });
     }
     
-    if (typeof module === "undefined") { self.mapper = booya; } else { module.exports = booya; }
+    if (typeof define === "function") {
+        define(function (require, exports, module) {
+            module.exports = booya;
+        });
+    } else if (typeof module === "undefined") {
+        self.mapper = booya;
+    } else {
+        module.exports = booya;
+    }
 }());
