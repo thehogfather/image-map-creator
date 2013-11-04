@@ -78,7 +78,6 @@
                 d3.event.stopPropagation();
                 var mmPos = {x: d3.mouse(this)[0], y: d3.mouse(this)[1]};
                 var dx = mmPos.x - mdPos.x, dy = mmPos.y - mdPos.y;
-               // var w = rw + dx, h = rw + dy, x = w < 0 ? mmPos.x : rx, y = h < 0 ? mmPos.y : ry;
                 if (d.align === "tl") {
                     x = mmPos.x < (rx + rw) ? mmPos.x : (rx + rw);
                     y = mmPos.y < (ry + rh) ? mmPos.y : (ry + rh);
@@ -161,10 +160,9 @@
         props = cr(imageEl);
         
         function initialiseSVGLayer() {
-            mapLayer = d3.select(config.parent)
+            mapLayer = d3.select(config.parent).style("position", "relative")
                 .append("svg").attr("width", props.width).attr("height", props.height).attr("class", "image-map-layer")
-                .style("position", "absolute").style("top", props.top + "px")
-                .style("left", props.left + "px").style("cursor", "crosshair");
+                .style("position", "absolute").style("cursor", "crosshair").style("top", 0).style("left", 0);
         }
         
         function getImageMapData() {
@@ -218,18 +216,13 @@
                 _el_poll_count++;
             }
         }, 100);
-        //update map layer on document resize
-        window.onresize = function () {
-            props = cr(imageEl);
-            mapLayer.style("top", props.top + "px").style("left", props.left + "px")
-                .attr("width", props.width).attr("height", props.height);
-        };
+       
         d3.select("body").on("keydown", function () {
             var e = d3.event;
-            e.preventDefault();
-            e.stopPropagation();
             if (e.which === 46 || e.which === 8) {
                 ed.remove({regions: mapLayer.selectAll("g.selected")});
+				e.preventDefault();
+				e.stopPropagation();
             }
         });
     }

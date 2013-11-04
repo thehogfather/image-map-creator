@@ -31,21 +31,32 @@
                 stroke: rgba(35, 101, 32, 0.7);
                 cursor: move;
             }
+			
+			#theimage {
+				margin-right: auto;
+				margin-left:auto;
+				width: 1200px;
+			}
         </style>
     </head>
     <body>
-        <img src="image.jpg" id="image"/>
+        <div id="theimage"><img src="image.jpg" id="image"/></div>
+	
         <script>
-            var m = mapper({element: "#image"});
-            m.on("remove", function (e) {
-                console.log(e); 
-            }).on("create", function (e) {
-                console.log(e);  
-            }).on("move", function (e) {
-                console.log(e);  
-            }).on("resize", function (e) {
-                console.log(e);
-            });
+            var m ;
+			mapper({element: "#image", parent: "#theimage", onReady: function (res) {
+				m = res;
+				m.on("remove", function (e) {
+					console.log(e); 
+				}).on("create", function (e) {
+					console.log(e);  
+				}).on("move", function (e) {
+					console.log(e);  
+				}).on("resize", function (e) {
+					console.log(e);
+				});
+			}});
+           
         </script>
     </body>
 </html>
