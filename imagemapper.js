@@ -219,8 +219,8 @@
        
         d3.select("body").on("keydown", function () {
             var e = d3.event;
-            if (e.which === 46 || e.which === 8) {
-                ed.remove({regions: mapLayer.selectAll("g.selected")});
+            if ((e.which === 46 || e.which === 8) && e.target === this) {
+                ed.remove({regions: mapLayer.selectAll("g.selected rect.region")});
 				e.preventDefault();
 				e.stopPropagation();
             }
