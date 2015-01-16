@@ -143,7 +143,12 @@
     }
     
     function createRegion(svg, startPos, dispatcher) {
-        svg.selectAll("g.selected").classed("selected", false);//clear previous selections
+        var currentSelections = svg.selectAll("g.selected");
+        //clear previous selections
+        if (!currentSelections.empty()) {
+            dispatcher.clearselection({regions: currentSelections});
+            currentSelections.classed("selected", false);
+        }
         var g = svg.select("g").append("g").attr("class", "selected"), moved = false, moveRegionStarted = false;
         var region = g.append("rect").attr("x", startPos.x).attr("y", startPos.y).attr("class", "region");
         var corners = g.selectAll("rect.corner").data(helperData).enter()
@@ -186,7 +191,7 @@
         //clear any previous svgs
         d3.select(config.parent + " svg").remove();
         var imageEl = d3.select(config.element), props, mapLayer, svg,
-            ed = d3.dispatch("create", "remove", "resize", "move", "select"), initTimer, _el_poll_count = 0;
+            ed = d3.dispatch("create", "remove", "resize", "move", "select", "clearselection"), initTimer, _el_poll_count = 0;
         props = cr(imageEl);
         
         function initialiseSVGLayer() {
